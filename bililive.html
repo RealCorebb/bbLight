@@ -90,72 +90,36 @@ ws.onmessage = async function (msgEvent) {
 			var danmu = (`${body.info[1]}`);
 			console.log (danmu);
 			switch (danmu){
-			/*
-				case '开灯':
-					console.log("开灯");
-					$.get(urlBase + "set?b=255");
-					document.body.style.backgroundColor = "ffffff";
-					break;
-				case '关灯':
-					console.log("关灯");
-					$.get(urlBase + "set?b=0");
-					document.body.style.backgroundColor = "000000";
-					
-					break;
-				case '变蓝':
-					console.log("开始变蓝");
-					$.get(urlBase + "set?c=" + "1e90ff")
-					document.body.style.backgroundColor = "1e90ff";
-					break;
-				case '变绿':
-					console.log("开始变绿");
-					$.get(urlBase + "set?c=" + "7bed9f")
-					document.body.style.backgroundColor = "7bed9f";
-					break;
-				case '变红':
-					console.log("开始变红");
-					$.get(urlBase + "set?c=" + "ff4757")
-					document.body.style.backgroundColor = "ff4757";
-					break;
-				case '变黄':
-					console.log("开始变黄");
-					$.get(urlBase + "set?c=" + "FFC312")
-					document.body.style.backgroundColor = "FFC312";
-					break;
-				case '变橙':
-					console.log("开始变橙");
-					$.get(urlBase + "set?c=" + "ffa502")
-					document.body.style.backgroundColor = "ffa502";
-					break;
-				case '变青':
-					console.log("开始变青");
-					$.get(urlBase + "set?c=" + "12CBC4")
-					document.body.style.backgroundColor = "12CBC4";
-					break;
-				case '变紫':
-					console.log("开始变紫");
-					$.get(urlBase + "set?c=" + "D980FA")
-					document.body.style.backgroundColor = "D980FA";
-					break;
-				case '变粉':
-					console.log("开始变粉");
-					$.get(urlBase + "set?c=" + "FDA7DF")
-					document.body.style.backgroundColor = "FDA7DF";
-					break;
-				case '变白':
-					console.log("开始变白");
-					$.get(urlBase + "set?c=" + "ffffff")
-					document.body.style.backgroundColor = "ffffff";
-					break;
-					*/
+			
+	
+				
 				}
+				
             break;
+			
           case 'SEND_GIFT':
+			
             console.log(`${body.data.uname} ${body.data.action} ${body.data.num} 个 ${body.data.giftName}`);
-			$.get(urlBase + "set?m=" + "11")
-						setTimeout(function() {
+			if ('${body.data.giftName}'=="辣条"){
+			$.get(urlBase + "set?c=" + "ff1443");
+			$.get(urlBase + "set?m=" + "15");
+							setTimeout(function() {
+				$.get(urlBase + "set?c=" + "f766ff")
+				}, 1999);
+				setTimeout(function() {
 				$.get(urlBase + "set?m=" + "0")
+				}, 2000);
+				}
+
+			else{
+			
+			$.get(urlBase + "set?m=" + "11");
+						setTimeout(function() {
+				
+				$.get(urlBase + "set?m=" + "0")		
 				}, 5000);
+				}
+			
             break;
           case 'WELCOME':
             console.log(`欢迎 ${body.data.uname}`);
