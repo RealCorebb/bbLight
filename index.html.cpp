@@ -81,8 +81,14 @@ char index_html[] PROGMEM = R"=====(
 </head>
 <body>
   <h1>bbLight Control</h1>
-  <div id='colobars'>
-  <canvas id='colorbar' width='75' height='200'></canvas>
+  <div id='colobars' style="width:400px;margin:0 auto">
+  <input type="color" id="color" name="c" style="width:400px;height:180px;margin:0 auto" value="#ff0000">
+  <br><br>
+  <label for="gamma" style="padding:2px;font-size:28px;text-align:center;border:2px solid #454545;background-color:#202020;color:#454545;border-radius:5px">Gamma</label> 
+  <input type="range" id="gamma" name="gamma" style="width:280px"
+         min="0" max="255">
+  </input>
+  <br><br>
   </div>
   <div id='controls'>
   <details>

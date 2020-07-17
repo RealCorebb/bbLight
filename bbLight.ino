@@ -49,8 +49,8 @@ void setup(){
   ws2812fx.start();
 
   Serial.println("Wifi setup");
-  WiFi.hostname("bbLight");
   WiFiManager wifiManager;
+  wifiManager.setHostname("bbLight");
   wifiManager.autoConnect("bbLight");
   Serial.println("HTTP server setup");
   server.on("/", srv_handle_index_html);
@@ -133,7 +133,15 @@ void srv_handle_set() {
         ws2812fx.setColor(tmp);
       }
     }
-
+    if(server.argName(i) == "C") {
+      String value = server.arg(i).c_str();
+      Serial.println(value);
+      int r = getValue(value,',',0).toInt();
+      int g = getValue(value,',',1).toInt();
+      int b = getValue(value,',',2).toInt();
+      int w = getValue(value,',',3).toInt();
+        ws2812fx.setColor(r,g,b,w);
+    }
     if(server.argName(i) == "m") {
       uint8_t tmp = (uint8_t) strtol(server.arg(i).c_str(), NULL, 10);
       ws2812fx.setMode(tmp % ws2812fx.getModeCount());
@@ -174,4 +182,21 @@ void srv_handle_set() {
     }
   }
   server.send(200, "text/plain", "OK");
+}
+
+String getValue(String data, char separator, int index)
+{
+     int found = 0;
+     int strIndex[] = {0, -1};
+     int maxIndex = data.length()-1;
+
+     for(int i=0; i<=maxIndex && found<=index; i++){
+       if(data.charAt(i)==separator || i==maxIndex){
+           found++;
+           strIndex[0] = strIndex[1]+1;
+           strIndex[1] = (i == maxIndex) ? i+1 : i;
+       }
+     }
+
+     return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
