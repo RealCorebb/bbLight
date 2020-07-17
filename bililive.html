@@ -2,11 +2,13 @@
     <head>   
         <meta charset="UTF-8">
         <title>bbLight Bilibili</title> 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.11/pako.js"></script>
 		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+		
 		<script>
 const textEncoder = new TextEncoder('utf-8');
 const textDecoder = new TextDecoder('utf-8');
-var urlBase="http://192.168.1.237/";
+var urlBase="http://bblight.lan/";
 const readInt = function(buffer,start,len){
   let result = 0
   for(let i=len - 1;i >= 0;i--){
@@ -48,10 +50,11 @@ const decode = function(blob){
           let packetLen = readInt(buffer,offset + 0,4)
           let headerLen = 16// readInt(buffer,offset + 4,4)
           let data = buffer.slice(offset + headerLen, offset + packetLen);
-          let body = textDecoder.decode(data);
-          if(body){
-            result.body.push(JSON.parse(body));
+          let body = textDecoder.decode(pako.inflate(data));
+          if (body) {
+              result.body.push(JSON.parse(body.slice(body.indexOf("{"))));
           }
+
           offset += packetLen;
         }
       }else if(result.op === 3){
@@ -90,7 +93,7 @@ ws.onmessage = async function (msgEvent) {
 			var danmu = (`${body.info[1]}`);
 			console.log (danmu);
 			switch (danmu){
-			/*
+			//弹幕触发互动， case里面的为弹幕内容， 其它为16进制颜色代码
 				case '开灯':
 					console.log("开灯");
 					$.get(urlBase + "set?b=255");
@@ -147,20 +150,22 @@ ws.onmessage = async function (msgEvent) {
 					$.get(urlBase + "set?c=" + "ffffff")
 					document.body.style.backgroundColor = "ffffff";
 					break;
-					*/
+					
 				}
             break;
           case 'SEND_GIFT':
+		  //礼物特效
             console.log(`${body.data.uname} ${body.data.action} ${body.data.num} 个 ${body.data.giftName}`);
-			$.get(urlBase + "set?m=" + "11")
+			$.get(urlBase + "set?m=" + "11")   //调到第（1+11）12个模式
 						setTimeout(function() {
-				$.get(urlBase + "set?m=" + "0")
-				}, 5000);
+				$.get(urlBase + "set?m=" + "0")   //调回第1个模式（静止颜色）
+				}, 5000);  //持续5000毫秒
             break;
+			
+			
           case 'WELCOME':
             console.log(`欢迎 ${body.data.uname}`);
             break;
-          // 此处省略很多其他通知类型
           default:
             console.log(body);
         }
